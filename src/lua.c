@@ -11,6 +11,7 @@
 #include <string.h>
 
 #define lua_c
+#define LUA_BUILD_AS_DLL
 
 #include "lua.h"
 
@@ -56,7 +57,7 @@ static void print_usage (void) {
 
 
 static void l_message (const char *pname, const char *msg) {
-  if (pname) fprintf(stderr, "%s:100 \n", pname);
+  if (pname) fprintf(stderr, "%s: \n", pname);
   fprintf(stderr, "%s\n", msg);
   fflush(stderr);
 }
@@ -386,6 +387,8 @@ int main (int argc, char **argv) {
   s.argv = argv;
   status = lua_cpcall(L, &pmain, &s);
   report(L, status);
+  if (status == 0 && s.status == 0)
+	  printf("ok !");
   lua_close(L);
   return (status || s.status) ? EXIT_FAILURE : EXIT_SUCCESS;
 }
